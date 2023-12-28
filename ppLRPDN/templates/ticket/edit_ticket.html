@@ -1,0 +1,188 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Ticket</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'PickingProblems/css/create_ticket.css' %}">
+</head>
+<body>
+    
+    <div class="top-bar">
+        <!-- Logo container -->
+        <div class="logo-container">
+            <img src="{% static 'PickingProblems/images/logo.png' %}" class="logo">
+        </div>
+        <!-- Move the text to the top right -->        
+        <a href="{% url 'login' %}" class="red-button"><i class="fa fa-sign-out"></i> Sign Out</a>
+
+    </div>
+    <div class="center-text">
+        <h2>Operator Performance Form</h2>
+        <form method="post" id="ticket-form">
+            {% csrf_token %}
+        
+            <!-- General Information Section -->
+            <div class="section-title">
+                <h3>General Information</h3>
+            </div>
+            <div class="form-section">
+                <div class="form-row">
+                    <div class="form-column">
+                        <label for="{{ form.employee_name.id_for_label }}">Employee User:</label>
+                        {{ form.employee_name }}
+                    </div>
+                    <div class="form-column">
+                        <label for="{{ form.badge_number.id_for_label }}">Badge Number:</label>
+                        {{ form.badge_number }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-column">
+                        <label for="{{ form.date.id_for_label }}">Date:</label>
+                        {{ form.date }}
+                    </div>
+                    <div class="form-column">
+                        <label for="{{ form.location.id_for_label }}">Location:</label>
+                        {{ form.location }}
+                    </div> 
+                </div>
+                <div class="form-row">
+                    <div class="form-column">
+                        <label for="{{ form.item_number.id_for_label}}">Item #:</label>
+                        {{ form.item_number }}
+                    </div>
+                    <div class="form-column">
+                        <label for="{{ form.work_order.id_for_label }}">Work Order:</label>
+                        {{ form.work_order }}
+                    </div> 
+                </div>
+                    <div class="form-row single-textarea">
+                        <div class="form-column">
+                            <label for="{{ form.item_description.id_for_label }}">Item Description:</label>
+                        </div>
+                    </div>
+                    <div class="form-row single-textarea">
+                        <div class="form-column">
+                            {{ form.item_description }}
+                        </div>
+                    </div>
+                
+                
+                
+                
+            </div>
+        
+            <!-- Supplier Section -->
+            <div class="section-title">
+                <h3>Supplier</h3>
+            </div>
+            <div class="form-section">
+                <label for="{{ form.supplier.id_for_label }}">Supplier:</label>
+                {{ form.supplier }}
+                <div class="form-row"></div>
+            </div>
+        
+            <!-- Non Conformance(s) Section -->
+            <div class="section-title">
+                <h3>Non Conformance(s)</h3>
+            </div>
+            <div class="form-section multi-select-container">
+                {% for choice in form.non_conformances %}
+                    <label class="checkbox-label">
+                        {{ choice.tag }} {{ choice.choice_label }}
+                    </label>
+                {% endfor %}
+            </div>
+            
+            <!-- Investigation Section -->
+            <div class="section-title">
+                <h3>Investigation</h3>
+            </div>
+            <div class="form-section">
+                <div class="form-row">
+                    <div class="form-column">
+                        <label for="{{ form.lead_supervisor.id_for_label }}">Lead Supervisor:</label>
+                        {{ form.lead_supervisor }}
+                    </div>
+                    <div class="form-column">
+                        <label for="{{ form.investigation_date.id_for_label }}">Date:</label>
+                        {{ form.investigation_date }}
+                    </div>
+                </div>
+                <div class="form-row"></div>
+            </div>
+            
+            <!-- Corrective Action Section-->
+            <div class="section-title">
+                <h3>Corrective Action</h3>
+            </div>
+            
+            <div class="form-section">
+                <div class="form-row">
+                    <div class="form-column">
+                        <label for="{{ form.training.id_for_label }}">Training:</label>
+                        {{ form.training }}
+                    </div>
+                    <div class="form-column">
+                        <label for="{{ form.training_date.id_for_label }}">Date:</label>
+                        {{ form.training_date }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-column">
+                        <label for="{{ form.counseling.id_for_label }}">Counseling:</label>
+                        {{ form.counseling }}
+                    </div>
+                    <div class="form-column">
+                        <label for="{{ form.counseling_date.id_for_label }}">Date:</label>
+                        {{ form.counseling_date }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-column">
+                        <label for="{{ form.disciplinary_action.id_for_label }}">Disciplinary Action:</label>
+                        {{ form.disciplinary_action }}
+                    </div>
+                    <div class="form-column">
+                        <label for="{{ form.disciplinary_action_date.id_for_label }}">Date:</label>
+                        {{ form.disciplinary_action_date }}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-column">
+                        <label for="{{ form.employee_signature.id_for_label }}">Employee Signature:</label>
+                        {{ form.employee_signature }}
+                    </div>
+                    <div class="form-column">
+                        <label for="{{ form.employee_signature_date.id_for_label }}">Date:</label>
+                        {{ form.employee_signature_date }}
+                    </div>
+                </div>
+                <div class="form-row single-textarea">
+                    <div class="form-column">
+                        <label for="{{ form.notes.id_for_label }}">Notes:</label>
+                    </div>
+                </div>
+                <div class="form-row single-textarea">
+                    <div class="form-column">
+                        {{ form.notes }}
+                    </div>
+                </div>
+                
+            </div>
+            <div class="button-list">
+                <button type="submit" class="menu-button" id="menu-button">Submit</button>
+            </div>
+        </form>
+    </div> 
+    <script>
+        document.getElementById('menu-button').addEventListener('click', function(event) {
+            window.print();          // Open the print dialog
+        });
+    </script>
+</body>
+</html>

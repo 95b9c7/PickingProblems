@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'PickingProblems/css/reporting.css' %}">
+    <title>Weekly Transactions Menu</title>
+</head>
+<body>
+    <div class="top-bar">
+        <!-- Logo container -->
+        <div class="logo-container">
+            <img src="{% static 'PickingProblems/images/logo.png' %}" class="logo">
+        </div>
+        <!-- Move the text to the top right -->        
+        <a href="{% url 'login' %}" class="red-button"><i class="fa fa-sign-out"></i> Sign Out</a>
+
+    </div>
+    <div class="center-text" >
+  <h1>Weekly Transactions Report Menu</h1>
+  <div class="form-container">
+  <form method="POST">
+    {% csrf_token %}
+    <div>
+        <label for="id_start_tdate">Transaction Date in the range:</label>
+    <div>
+        <input type="date" name="start_tdate" id="id_start_tdate" required="True">
+        <label for="id_end_tdate">to</label>
+        <input type="date" name="end_tdate" id="id_end_tdate" required="True">
+    </div>
+    </div>
+    <!-- Add more filter criteria fields here as needed -->
+    <a href="{% url 'pp_reports_menu' %}" class="menu-button"><i class="fa fa-arrow-left"></i> Back</a>
+    <button class="menu-button"><i class="fas fa-file-alt"></i> Generate Report</button>
+  </form>
+  </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Follow-Up Picking Problems</title>
+    <!-- Add your CSS styles here if needed -->
+</head>
+<body>
+   
+    <div class="center-text">
+        <h1>Follow-Up Picking Problems</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Reference #</th>
+                    <th>User</th>
+                    <th>Date</th>
+                    <th>Department Responsible</th>
+                    <th>Problem</th>
+                    <th>Work Order</th>
+                    <th>Part #</th>
+                    <th>Part Description</th>
+                    <th>Qty.</th>
+                    <th>Qty. Affected</th>
+                    <th>UoM</th>
+                    <th>Department</th>
+                    <th>Line</th>
+                    <th>Comments</th>
+                    <!-- Add more table headers for other fields as needed -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for submission in submissions %}
+                <tr>
+                    <td>{{ submission.reference_number }}</td>
+                    <td>{{ submission.name }}</td>
+                    <td>{{ submission.date }}</td>
+                    <td>{{ submission.app_dept }}</td>
+                    <td>{{ submission.defect }}</td>
+                    <td>{{ submission.work_order }}</td>
+                    <td>{{ submission.part_number }}</td>
+                    <td>{{ submission.item_dsc }}</td>
+                    <td>{{ submission.total_quantity }}</td>
+                    <td>{{ submission.total_affected }}</td>
+                    <td>{{ submission.unit_type }}</td>
+                    <td>{{ submission.department }}</td>
+                    <td>{{ submission.line }}</td>
+                    <td>{{ submission.comment }}</td>
+                    <!-- Add more table cells for other fields as needed -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,369 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Picking Problem</title>
+    <link rel="stylesheet" href="{% static 'PickingProblems/css/npp.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="top-bar">
+        <!-- Logo container -->
+        <div class="logo-container">
+            <img src="{% static 'PickingProblems/images/logo.png' %}" class="logo">
+        </div>
+        <!-- Move the text to the top right -->        
+        <a href="{% url 'login' %}" class="red-button"><i class="fa fa-sign-out-alt"></i> Sign Out</a>
+        
+    </div>
+    <div class="center-text">
+        <h1>New Picking Problem</h1>
+        <div class="form-container">
+        <form method="post" onsubmit="return validateForm()">
+            {% csrf_token %}
+            {{ form.name }}
+            {{ form.time }}
+            {{ form.date }}
+            <input type="hidden" id="id_job_number" name="job_number" value="">
+            
+            <div class="form-row">
+                <div class="form-field bold-text">
+                    {{ form.department.label_tag }}
+                    {{ form.department }}
+                </div>
+                <div class="form-field bold-text">
+                    {{ form.line.label_tag }}
+                    {{ form.line }}
+                </div>
+                <div class="form-field bold-text">
+                    {{ form.shift.label_tag }}
+                    {{ form.shift }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-field bold-text">
+                    {{ form.work_order.label_tag }}
+                    {{ form.work_order }}
+                    <button type="button" id="search-button" onclick="searchButtonClick()">Search</button>
+                </div>
+                <div class="form-field bold-text">
+                    {{ form.part_number.label_tag }}
+                    <input type="text" id="id_part_number" name="{{ form.part_number.name }}" readonly>
+                </div>
+                <div class="form-field bold-text">
+                    {{ form.item_dsc.label_tag }}
+                    <input type="text" id="id_item_dsc" name="{{ form.item_dsc.name }}" readonly>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-field bold-text">
+                    {{ form.app_dept.label_tag }}
+                    {{ form.app_dept }}
+                </div>
+            </div>
+            <div id="defect-error" class="error-message"></div>
+            <div class="form-row">
+            
+            <div class="bold-text">
+                {{ form.defect.label_tag }}
+            </div>
+            <div id="defect-choices" la>
+                <!-- Radio buttons and labels will be added dynamically here -->
+            </div>
+            
+        </div>
+            <div class="form-row">
+                <div class="form-field bold-text">
+                    {{ form.unit_type.label_tag }}
+                    <input type="text" id="id_unit_type" name="{{ form.unit_type.name }}" readonly>
+                </div>
+                <div class="form-field bold-text">
+                    {{ form.total_count.label_tag }}
+                    <input type="number" id="id_total_count" name="{{ form.total_count.name }}" readonly>
+                </div>
+                <div class="form-field bold-text">
+                    {{ form.total_affected.label_tag }}
+                    {{ form.total_affected }}
+                </div>
+            </div>                   
+            <div class="form-row ">
+                <div class="form-field bold-text">
+                    {{ form.comment.label_tag }}
+                    {{ form.comment }}
+                </div>
+            </div>
+                <div class="button-list">
+                    
+                    <a href="{% url 'pick_menu' %}" class="menu-button" style="min-width: 150px;"><i class="fa fa-arrow-left"></i> Back</a>
+                    <button type="submit" class="menu-button" style="min-width: 150px;"><i class="fa fa-check"></i> Submit</button>
+                </div>
+        </form>
+        </div>
+        <!-- Modal Structure -->
+        <div class="modal fade" id="queryResultsModal" tabindex="-1" role="dialog" aria-labelledby="queryResultsModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="queryResultsModalLabel">Lookup</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Results will be displayed here -->
+                        <ul id="queryResultsList"></ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            function searchButtonClick() {
+                $('#queryResultsList').empty();
+                $('#search-button').addClass('wait-cursor');
+                var workOrder = $('#id_work_order').val();
+                $('#queryResultsList').empty();
+                // Make an AJAX request to fetch query results
+                $.ajax({
+                    url: '/fetch_data/',
+                    data: { work_order: workOrder },
+                    success: function(data) {
+                        // Clear previous results
+                        $('#queryResultsList').empty();
+
+                        var uniqueResults = {}; // Use an object to store unique results
+                        
+                        // Check if there are results to display
+                        if (data.results && data.results.length > 0) {
+                            var table = $('<table>').addClass('table'); // Create a table element with Bootstrap table class
+                            var thead = $('<thead>').appendTo(table); // Create the table header
+                            var tbody = $('<tbody>').appendTo(table); // Create the table body
+
+                            // Define table headers
+                            var headers = ['TSCO', 'TSCODE', 'TSPN', 'TSREFN', 'TSTQTY', 'TSLOCF', 'USRPRF', 'TSDATE','TSDFOR', 'TSUTMS'];
+
+                            // Create table header row
+                            var headerRow = $('<tr>').addClass('header-row');
+                            for (var i = 0; i < headers.length; i++) {
+                                headerRow.append($('<th>').text(headers[i]));
+                            }
+                            thead.append(headerRow);
+
+                            // Loop through the results and add rows to the table
+                            for (var i = 0; i < data.results.length; i++) {
+                                var result = data.results[i];
+                                var row = $('<tr>');
+
+                                // Check if the current row is even or odd and apply the alternate-row class accordingly
+                                if (i % 2 === 0) {
+                                    row.addClass('alternate-row');
+                                }
+
+                                for (var j = 0; j < headers.length; j++) {
+                                    var cell = $('<td>').text(result[headers[j]]);
+                                    row.append(cell);
+                                }
+
+                                // Add a click handler to the table row to select it
+                                row.click(function() {
+                                    // Remove any previously selected rows
+                                    $('tr.selected').removeClass('selected');
+
+                                    // Highlight the selected row
+                                    $(this).addClass('selected');
+
+                                    // Retrieve the data associated with the selected row
+                                    var selectedRowData = $(this).data('result'); // Use $(this).data('result') to get the stored data
+
+                                    // Automatically fill out form fields based on the selected row's data
+                                    $('#id_part_number').val(selectedRowData.TSPN); // Example: TSPN field
+                                    $('#id_item_dsc').val(selectedRowData.IMDSC); // Example: USRPRF field
+                                    $('#id_total_count').val(selectedRowData.TSTQTY);
+                                    $('#id_unit_type').val(selectedRowData.TSUTMS);
+                                    $('#id_job_number').val(selectedRowData.TSDFOR);
+                                    // Add more fields as needed
+
+                                    // Close the modal
+                                    $('#queryResultsModal').modal('hide');
+                                });
+
+                                // Add hover effect class to rows
+                                row.hover(function() {
+                                    $(this).addClass('hovered');
+                                }, function() {
+                                    $(this).removeClass('hovered');
+                                });
+
+                                // Store the result data in the row for retrieval when clicked
+                                row.data('result', result);
+
+                                tbody.append(row);
+                            }
+
+                            // Create a div to make the table scrollable
+                            var scrollableDiv = $('<div>').css('max-height', '300px').css('overflow-y', 'auto');
+                            scrollableDiv.append(table);
+
+                            // Append the scrollable div to the modal
+                            $('#queryResultsList').append(scrollableDiv);
+                        } else {
+                            // Handle the case where there are no results
+                            $('#queryResultsList').text('No results found');
+                        }
+
+                        // Show the modal
+                        $('#queryResultsModal').modal('show');
+                        $('#search-button').removeClass('wait-cursor');
+                    }
+                });
+            }
+            </script>
+            <script>
+                // Define the choices for the "Defect" field based on the selected department
+                const defectChoices = {
+                    'PCKN': [
+                        ['Dirty', 'Dirty'],
+                        ['Damaged', 'Damaged'],
+                        ['Wrong', 'Wrong'],
+                        ['Incomplete', 'Incomplete'],
+                        ['Excess', 'Excess'],
+                        ['Short', 'Short'],
+                        ['Expiration', 'Expiration'],
+                        ['Wrong UoM', 'Wrong UoM'],
+                        // Add more choices as needed
+                    ],
+                    'RTRN': [
+                        ['Dirty', 'Dirty'],
+                        ['Damaged', 'Damaged'],
+                        ['Wrong', 'Wrong'],
+                        ['Incomplete', 'Incomplete'],
+                        ['Excess', 'Excess'],
+                        ['Short', 'Short'],
+                        ['Expiration', 'Expiration'],
+                        ['Wrong UoM', 'Wrong UoM'],
+                    ],
+                    'RUSH': [
+                        ['Dirty', 'Dirty'],
+                        ['Damaged', 'Damaged'],
+                        ['Wrong', 'Wrong'],
+                        ['Incomplete', 'Incomplete'],
+                        ['Excess', 'Excess'],
+                        ['Short', 'Short'],
+                        ['Expiration', 'Expiration'],
+                        ['Wrong UoM', 'Wrong UoM'],
+                    ],
+                    'INVC': [
+                        ['Dirty', 'Dirty'],
+                        ['Damaged', 'Damaged'],
+                        ['Wrong', 'Wrong'],
+                        ['Incomplete', 'Incomplete'],
+                        ['Excess', 'Excess'],
+                        ['Short', 'Short'],
+                        ['Expiration', 'Expiration'],
+                        ['Wrong UoM', 'Wrong UoM'],
+                    ],
+                    'PRDN': [
+                        ['Dirty', 'Dirty'],
+                        ['Damaged', 'Damaged'],
+                        ['Wrong', 'Wrong'],
+                        ['Incomplete', 'Incomplete'],
+                        ['Excess', 'Excess'],
+                        ['Short', 'Short'],
+                        ['Other', 'Other'],
+                    ],
+                    'PTAW': [
+                        ['Dirty', 'Dirty'],
+                        ['Damaged', 'Damaged'],
+                        ['Wrong', 'Wrong'],
+                        ['Incomplete', 'Incomplete'],
+                        ['Excess', 'Excess'],
+                        ['Short', 'Short'],
+                        ['Expiration', 'Expiration'],
+                        ['Wrong UoM', 'Wrong UoM'],
+                    ],
+                    'RCVG': [
+                        ['WrngPrt', 'Wrong Part'],
+                        ['MxPrt', 'Mixed Part'],
+                        ['WrngQty', 'Wrong Quantity'],
+                        ['WrngLoc', 'Wrong Location'],
+
+                    ],
+                    'STUP': [
+                        ['Clearance', 'Clearance'],
+                        ['Missing', 'Missing'],
+                        ['Excess', 'Excess'],
+                        ['Wrong', 'Wrong'],
+                        ['Photos', 'Photos'],
+                    ],
+                };
+            
+                // Function to update the "Defect" field's choices based on the selected department
+                function updateDefectChoices() {
+                    const selectedDept = $('#id_app_dept').val();
+                    const defectChoicesForDept = defectChoices[selectedDept] || [];
+
+                    const defectContainer = $('#defect-choices');
+                    defectContainer.empty();
+
+                    for (const [value, label] of defectChoicesForDept) {
+                        const choiceDiv = $('<div>').css('display', 'inline-block');
+                        const labelElement = $('<label>').attr('for', `id_defect_${value}`);
+                        labelElement.append($('<input>').attr({
+                            type: 'radio',
+                            name: 'defect',
+                            id: `id_defect_${value}`,
+                            value,
+                        }));
+                        labelElement.append(document.createTextNode(label));
+                        choiceDiv.append(labelElement);
+                        defectContainer.append(choiceDiv);
+                    }
+                }
+
+                function validateForm() {
+                    var selectedDefect = $("input[name='defect']:checked").val();
+                    // Get the values of "Total Count" and "Total Affected" fields
+                    if (!selectedDefect) {
+                        // Display an error message
+                        alert('Please select a defect.');
+
+                        // Prevent the form from being submitted
+                        return false;
+                    } 
+                    var totalCount = parseInt(document.getElementById('id_total_count').value, 10);
+                    var totalAffected = parseInt(document.getElementById('id_total_affected').value, 10);
+                   
+                    // Check if "Total Affected" is greater than "Total Count"
+                    if (totalAffected > totalCount) {
+                        // Display an error message (you can customize this part)
+                        alert('Total Affected cannot be greater than Total Count.');
+                        
+                        // Prevent the form from being submitted
+                        return false;
+                    }
+
+                    // If the validation passes, allow the form to be submitted
+                    return true;
+                }
+
+                // Listen for changes in the "Department Appplied to" field
+                $('#id_app_dept').on('change', updateDefectChoices);
+
+                // Initial update based on the current selected department
+                updateDefectChoices();
+            </script>
+            <script>
+                function convertNameToUpperCase() {
+                    // Get the name input value and convert it to uppercase
+                    var nameInput = document.getElementById("id_name"); // Replace 'id_name' with the actual ID of your name field
+                    nameInput.value = nameInput.value.toUpperCase();
+                }
+            </script>  
+</body>
+</html>

@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'PickingProblems/css/eliminate.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminate Picking Problems</title>
+        </head>
+        <body>
+            <div class="top-bar">
+                <!-- Logo container -->
+                <div class="logo-container">
+                    <img src="{% static 'PickingProblems/images/logo.png' %}" class="logo">
+                </div>
+                <!-- Move the text to the top right -->        
+                <a href="{% url 'login' %}" class="red-button"><i class="fa fa-sign-out"></i> Sign Out</a>
+
+            </div>
+            <div class="center-text" >
+                <h1>Eliminate Picking Problem #{{form.instance.reference_number}}</h1>  
+            </div>
+
+            <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="{{ form.reference_number.id_for_label }}">Reference #:</label>
+                        <span>{{ form.instance.reference_number }}</span>
+                    </div>
+                    <div class="form-field"> 
+                        <label for="{{ form.work_order.id_for_label }}">Work Order:</label>
+                        <span>{{ form.instance.work_order }}</span>
+                    </div> 
+                    <div class="form-field">
+                        <label for="{{ form.shift.id_for_label }}">Shift:</label>
+                        <span>{{ form.instance.shift }}</span>
+                    </div> 
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="{{ form.app_dept.id_for_label }}">Department Responsible:</label>
+                        <span>{{ form.instance.app_dept }}</span>
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.line.id_for_label }}">Line:</label>
+                        <span>{{ form.instance.line }}</span>
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.department.id_for_label }}">Reporting Department:</label>
+                        <span>{{ form.instance.department }}</span>
+                    </div> 
+                    
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="{{ form.name.id_for_label }}">Reporting User:</label>
+                        <span>{{ form.instance.name }}</span> 
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.time.id_for_label }}">Time:</label>
+                        <span>{{ form.instance.time }}</span> 
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.date.id_for_label }}">Date:</label>
+                        <span>{{ form.instance.date }}</span>
+                    </div>
+                    
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="{{ form.part_number.id_for_label }}">Part #:</label>
+                        <span>{{ form.instance.part_number }}</span> 
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.item_dsc.id_for_label }}">Part Description:</label>
+                        <span>{{ form.instance.item_dsc }}</span> 
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.defect.id_for_label }}">Defect:</label>
+                        <span>{{ form.instance.defect }}</span> 
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="{{ form.total_count.id_for_label }}">Total Count:</label>
+                        <span>{{ form.instance.total_count }}</span>
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.total_affected.id_for_label }}">Total Affected:</label>
+                        {{ form.instance.total_affected }}
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.unit_type.id_for_label }}">Unit of Measure:</label>
+                        <span>{{ form.instance.unit_type }}</span>
+                    </div>
+                </div>
+                <div class="comment">
+                    <label for="{{ form.comment.id_for_label }}">Comment:</label>
+                    {{ form.instance.comment }}
+                </div>
+                
+                <div class="form-row">     
+                    <a href="{% url 'eliminate_pp' %}" class="menu-button"><i class="fa fa-arrow-left"></i> Back</a>
+                    <button type="submit" name="delete" class="red-button" onclick="return confirmDelete();" ><i class="fa fa-trash"></i> Delete</button>
+                </div>
+        </form>
+    </div>
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this picking problem?");
+        }
+    </script>
+</body>
+</html>

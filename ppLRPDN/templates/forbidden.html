@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forbidden</title>
+    <link rel="stylesheet" href="{% static 'PickingProblems/css/forbidden.css' %}">
+</head>
+<body>
+    <div class="top-bar">
+        <!-- Logo container -->
+        <div class="logo-container">
+            <img src="{% static 'PickingProblems/images/logo.png' %}" class="logo">
+        </div>
+        <!-- Move the text to the top right -->        
+        <a href="{% url 'login' %}" class="red-button"><i class="fa fa-sign-out"></i> Sign Out</a>
+
+    </div>
+    <div class="center-text" >
+        <h1>Access Forbidden</h1>
+        <h2>You do not have access to this page.</h2>
+        <a href="{% url 'menu' %}">Accept</a>
+    </div>
+    <div id="forbidden-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-modal">&times;</span>
+            <h1>Access Forbidden</h1>
+            <h2>You do not have access to this page.</h2>
+            <a href="{% url 'menu' %}">Accept</a>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    var modal = document.getElementById("forbidden-modal");
+    var showButton = document.getElementById("show-forbidden-modal");
+    var closeButton = document.getElementById("close-modal");
+
+    showButton.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Close the modal if the user clicks outside the modal content
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+});
+    </script>
+</body>
+</html>

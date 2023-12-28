@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'PickingProblems/css/ticket_success.css' %}">
+</head>
+<body>
+    <div class="top-bar">
+        <!-- Logo container -->
+        <div class="logo-container">
+            <img src="{% static 'PickingProblems/images/logo.png' %}" class="logo">
+        </div>
+        <!-- Move the text to the top right -->
+        <div class="top-right-text">
+            <h1>Laredo, Tx</h1>
+        </div>
+    </div>
+    <div class="center-text">
+        <h2>Ticket Created Successfully</h2>
+        <p>Ticket Number: <strong>{{ ticket_number }}</strong></p>
+        <!-- Add your success message or content here -->
+        <a href="{% url 'ticket_menu' %}">Accept</a>
+    </div>
+</body>
+</html>

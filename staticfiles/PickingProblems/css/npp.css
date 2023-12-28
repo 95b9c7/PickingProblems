@@ -1,0 +1,263 @@
+.sign-out-button {
+    color: #fff; /* Text color for the button */
+    background-color: #f00; /* Background color for the button */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border-radius: 5px; /* Add rounded corners */
+    text-decoration: none; /* Remove underline from the link */
+    margin-right: 20px; /* Add spacing between the button and text */
+    float: right; /* Float the button to the right */
+    font-weight: bold;
+}
+/* Define styles for the sign-out button on hover */
+.sign-out-button:hover {
+    background-color: #ff0000; /* Change the background color on hover */
+    color: #fff; /* Change the text color on hover */
+    transform: scale(1.05); /* Add a scaling effect on hover (optional) */
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* You can specify multiple fonts in a fallback order, in case the first one isn't available */
+}
+.center-text {
+    text-align: center;
+}
+
+.left text {
+    text-align: left;
+}
+
+ /* Style for the text on the top left */
+ .top-right-text h1 {
+    margin: 0; /* Remove default margin to avoid extra spacing */
+    font-size: 24px; /* Adjust the font size as needed */
+    color: white; /* Text color */
+    font-weight: bold; /* Make it bold */
+}
+
+.logo {
+    width: 95px; /* Set the desired width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Style for the top blue bar */
+.top-bar {
+    background-color: #15408c; /* Blue color */
+    height: 100px; /* Adjust the height as needed */
+    text-align: center;
+    display: flex;
+    justify-content: space-between; /* Align items in a row with space between them */
+    align-items: center; /* Vertically center items */
+    padding: 0 20px; /* Add some left and right padding for spacing */
+}
+
+
+.button-list {
+    list-style: none; /* Remove default list bullets */
+    padding: 0;
+    display: flex; /* Display list items in a row */
+    justify-content: center; /* Center the buttons horizontally */
+    align-items: center; /* Vertically center items */
+    margin-top: 20px; /* Add space between the heading and buttons */
+}
+
+.menu-button {
+    /* Apply the 'button-15' class styles to the menu buttons */
+    background-image: linear-gradient(#15408c, #849cc4);
+    border: 1px solid #0077CC;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: "SF Pro Text","SF Pro Icons","AOS Icons","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 17px; /* Match the font size with your button styles */
+    font-weight: bold;
+    letter-spacing: -.022em;
+    line-height: 1.47059;
+    min-width: 150px; /* Set a minimum width for buttons */
+    padding: 10px 15px; /* Adjust padding as needed */
+    text-align: center;
+    text-decoration: none; /* Remove underlines from links */
+    white-space: nowrap;
+    transition: background-image 0.3s, border-color 0.3s; /* Add hover transition */
+    margin: 0 10px; /* Add space between buttons */
+}
+.menu-button:hover {
+    background-image: linear-gradient(#51A9EE, #147BCD);
+    border-color: #1482D0;
+    text-decoration: none;
+}
+
+.menu-button:active {
+    background-image: linear-gradient(#3D94D9, #0067B9);
+    border-color: #006DBC;
+    outline: none;
+}
+
+.menu-button:focus {
+    box-shadow: rgba(131, 192, 253, 0.5) 0 0 0 3px;
+    outline: none;
+}
+
+.form-row {
+    display: flex;
+    justify-content:space-evenly;
+    align-items:flex-end;
+    margin-bottom: 20px; /* Adjust margin as needed */
+    
+}
+
+.form-field {
+    display:inline-flex;
+    flex: 0 0 30%; /* Adjust the width of each field */
+    
+}
+
+/* Close button styles */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    display: none;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Hide the modal title */
+.modal-header {
+    font-size: larger;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 9999; /* Adjust the z-index value as needed */
+}
+
+/* Modal content */
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.alternate-row {
+    background-color: #f2f2f2; /* Light gray background color */
+}
+
+.header-row {
+    background-color: #15408c;
+    color: white;
+}
+
+table {
+    width: 100%;
+    margin-bottom: 20px; /* Increase margin bottom for spacing */
+    border-collapse: collapse; /* Collapse table borders */
+}
+
+/* Add padding to table cells for spacing */
+table td, table th {
+    padding: 8px; /* Adjust the padding as needed */
+}
+
+/* Style for hover effect */
+.table tbody tr:hover {
+    background-color: #e1dd5f; /* Change to the desired hover color */
+    cursor: pointer; /* Change to pointer cursor on hover */
+}
+
+/* Style for selected row */
+.table tbody tr.selected {
+    background-color: #337ab7; /* Change to the desired selected color */
+    color: #fff; /* Change text color for better visibility */
+}
+
+.bold-text {
+    font-weight: bold;
+    margin-top: 20px;
+
+}
+
+#defect-choices {
+    /* display: inline-block; Display choices in the same line */
+    vertical-align: middle; /* Align vertically in the middle */
+    text-align: left;
+    margin-top: 10px;
+}
+
+#defect-choices label {
+    margin-right: 20px; /* Add some spacing between radio buttons and labels */
+    
+}
+
+.form-container {
+    background-color: #e0e0e0; /* Set your desired background color */
+    border-radius: 10px; /* Adjust the border radius to control the roundness of corners */
+    padding: 20px; /* Add padding inside the container to create spacing between the form and container edges */
+    width: 1200px; /* Set the width of the container as needed */
+    margin: 0 auto; /* Center the container horizontally on the page */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a shadow effect (optional) */
+}
+
+.wait-cursor {
+    cursor: wait; /* Change cursor to a spinning icon or hourglass */
+}
+.red-button {
+    background-image: linear-gradient(#FF0000, #CC0000); /* Red color gradient */
+    border: 1px solid #FF0000; /* Border color */
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: "SF Pro Text", "SF Pro Icons", "AOS Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: -.022em;
+    line-height: 1.47059;
+    min-width: 150px;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-image 0.3s, border-color 0.3s;
+    margin: 0 10px;
+}
+
+.red-button:hover {
+    background-image: linear-gradient(#FF3333, #CC3333); /* Slightly darker red on hover */
+    border-color: #FF3333;
+    text-decoration: none;
+}
+
+.red-button:active {
+    background-image: linear-gradient(#CC0000, #990000); /* Dark red when clicked */
+    border-color: #990000;
+    outline: none;
+}
+
+.red-button:focus {
+    box-shadow: rgba(255, 0, 0, 0.5) 0 0 0 3px; /* Red box shadow on focus */
+    outline: none;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}

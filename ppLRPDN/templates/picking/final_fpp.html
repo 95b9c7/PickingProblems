@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'PickingProblems/css/final_fpp.css' %}">
+    <title>Finalize</title>
+        </head>
+        <body>
+            <div class="top-bar">
+                <!-- Logo container -->
+                <div class="logo-container">
+                    <img src="{% static 'PickingProblems/images/logo.png' %}" class="logo">
+                </div>
+                <!-- Move the text to the top right -->        
+                <a href="{% url 'login' %}" class="red-button"><i class="fa fa-sign-out"></i> Sign Out</a>
+
+            </div>
+            <div class="center-text" >
+                <h1>Finalize Picking Problem</h1>  
+            </div>
+            <div class="form-container">
+            <button class="search-button" id="search-button" onclick="searchButtonClick()">
+                <i class="fa fa-search"></i>Transaction History
+            </button>
+            <form method="post">
+                {% csrf_token %}
+                
+                <input type="hidden" id="id_work_order" name="{{ form.work_order.name }}" value="{{ form.initial.work_order }}">
+                <input type="hidden" id="id_part_number" name="{{ form.part_number.name }}" value="{{ form.initial.part_number }}">
+                <div class="form-field form-row">
+                    {{ form.employee_username.label_tag }}
+                    <input type="text" id="id_employee_username" name="{{ form.employee_username.name }}" readonly>
+                    
+                </div>
+                
+                <div class="form-field form-row">
+                    {{ form.location.label_tag }}
+                    <input type="text" id="id_location" name="{{ form.location.name }}" readonly>
+                </div>
+                <div class="form-field form-row">
+                    {{ form.transaction_date.label_tag }}
+                    <input type="text" id="id_transaction_date" name="{{ form.transaction_date.name }}" readonly>
+                </div>
+                <div class="form-field form-row">
+                    {{ form.transaction_time.label_tag }}
+                    <input type="text" id="id_transaction_time" name="{{ form.transaction_time.name }}" readonly>
+
+                </div>
+                <div class="form-field form-row">
+                    {{ form.applied.label_tag }}
+                    {{ form.applied }}
+                </div>
+                <div class="form-field form-row">
+                    {{ form.root_cause.label_tag }}
+                    {{ form.root_cause }}
+                </div>
+                <div class="form-field form-row">
+                    {{ form.final_reason.label_tag }}
+                    {{ form.final_reason }}
+                </div>
+                <div class="form-field form-row">
+                    {{ form.final_comments.label_tag }}
+                    {{ form.final_comments }}
+                </div>
+                
+                <div class="form-field form-row">
+                    {{ form.finalized.label_tag }}
+                    {{ form.finalized }}
+                </div>
+                <div class="form-field form-row"></div>
+        <div class="form-field form-row">     
+            <a href="{% url 'fpp' %}" class="menu-button"><i class="fa fa-arrow-left"></i> Back</a>
+            <button class="menu-button"><i class="fa fa-check"></i> Submit</button>
+        </div>
+        </form>
+    <div class="modal fade" id="queryResultsModal" tabindex="-1" role="dialog" aria-labelledby="queryResultsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="queryResultsModalLabel">Lookup</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Results will be displayed here -->
+                    <ul id="queryResultsList"></ul>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            function searchButtonClick() {
+                $('#queryResultsList').empty();
+
+                var workOrder = $('#id_work_order').val();
+                var partNumber = $('#id_part_number').val();
+                console.log('workOrder:', workOrder);
+                console.log('partNumber:', partNumber);
+
+                // Function to convert "CYYMMDD" to a valid date format
+                function convertNumericDate(numericDate) {
+                            var century = numericDate[0];
+                            var year = numericDate.substring(1, 3);
+                            var month = numericDate.substring(3, 5);
+                            var day = numericDate.substring(5, 7);
+
+                            // Calculate the full year based on the century
+                            var fullYear = parseInt(century) < 50 ? 2000 + parseInt(year) : 1900 + parseInt(year);
+
+                            // Create a JavaScript Date object
+                            var date = new Date(fullYear, parseInt(month) - 1, parseInt(day)); // Note: Months are zero-based
+
+                            // Format the date as "YYYY-MM-DD" (adjust the format as needed)
+                            var formattedDate = (date.getMonth() + 1).toString().padStart(2, '0')  + '/' + date.getDate().toString().padStart(2, '0') + '/' + date.getFullYear();
+                            return formattedDate;
+                        }
+                // Function to convert the transaction time format
+                function convertTransactionTime(transactionTime) {
+                    if (transactionTime) {
+                        // Pad with leading zeros if the length is less than 6
+                        while (transactionTime.length < 6) {
+                            transactionTime = '0' + transactionTime;
+                        }
+                        var hours = transactionTime.slice(0, 2);
+                        var minutes = transactionTime.slice(2, 4);
+                        var seconds = transactionTime.slice(4, 6);
+                        return hours + ':' + minutes + ':' + seconds;
+                    } else {
+                        return transactionTime; // Return as-is if it doesn't match the expected format
+                    }
+                }
+                
+                // Make an AJAX request to fetch query results
+                $.ajax({
+                    url: '/fpp_fetch_data/',
+                    data: { work_order: workOrder, part_number: partNumber }, 
+                    success: function(data) {
+                        // Clear previous results
+                        $('#queryResultsList').empty();
+
+                        var uniqueResults = {}; // Use an object to store unique results
+                        
+                        // Check if there are results to display
+                        if (data.results && data.results.length > 0) {
+                            var table = $('<table>').addClass('table'); // Create a table element with Bootstrap table class
+                            var thead = $('<thead>').appendTo(table); // Create the table header
+                            var tbody = $('<tbody>').appendTo(table); // Create the table body
+
+                            // Define table headers
+                            var headers = ['TSCO', 'TSCODE', 'TSPN', 'TSREFN', 'TSTQTY', 'TSLOCF', 'USRPRF', 'TSDATE', 'TSUTMS'];
+
+                            // Create table header row
+                            var headerRow = $('<tr>').addClass('header-row');
+                            for (var i = 0; i < headers.length; i++) {
+                                headerRow.append($('<th>').text(headers[i]));
+                            }
+                            thead.append(headerRow);
+
+                            // Loop through the results and add rows to the table
+                            for (var i = 0; i < data.results.length; i++) {
+                                var result = data.results[i];
+                                var row = $('<tr>');
+
+                                // Check if the current row is even or odd and apply the alternate-row class accordingly
+                                if (i % 2 === 0) {
+                                    row.addClass('alternate-row');
+                                }
+
+                                for (var j = 0; j < headers.length; j++) {
+                                    var cell = $('<td>').text(result[headers[j]]);
+                                    row.append(cell);
+                                }
+
+                                // Add a click handler to the table row to select it
+                                row.click(function() {
+                                    // Remove any previously selected rows
+                                    $('tr.selected').removeClass('selected');
+
+                                    // Highlight the selected row
+                                    $(this).addClass('selected');
+
+                                    // Retrieve the data associated with the selected row
+                                    var selectedRowData = $(this).data('result'); // Use $(this).data('result') to get the stored data
+
+                                    // Automatically fill out form fields based on the selected row's data
+                                    $('#id_employee_username').val(selectedRowData.USRPRF); // Example: TSPN field
+                                    $('#id_transaction_date').val(convertNumericDate(selectedRowData.TSDATE)); // Example: USRPRF field
+                                    $('#id_transaction_time').val(convertTransactionTime(selectedRowData.TSTIME));
+                                    $('#id_location').val(selectedRowData.TSLOCF);
+                                    // Add more fields as needed
+
+                                    // Close the modal
+                                    $('#queryResultsModal').modal('hide');
+                                });
+
+                                // Add hover effect class to rows
+                                row.hover(function() {
+                                    $(this).addClass('hovered');
+                                }, function() {
+                                    $(this).removeClass('hovered');
+                                });
+
+                                // Store the result data in the row for retrieval when clicked
+                                row.data('result', result);
+
+                                tbody.append(row);
+                            }
+
+                            // Create a div to make the table scrollable
+                            var scrollableDiv = $('<div>').css('max-height', '300px').css('overflow-y', 'auto');
+                            scrollableDiv.append(table);
+
+                            // Append the scrollable div to the modal
+                            $('#queryResultsList').append(scrollableDiv);
+                        } else {
+                            // Handle the case where there are no results
+                            $('#queryResultsList').text('No results found');
+                        }
+
+                        // Show the modal
+                        $('#queryResultsModal').modal('show');
+                    }
+                });
+            }
+            </script>
+            
+</body>
+</html>

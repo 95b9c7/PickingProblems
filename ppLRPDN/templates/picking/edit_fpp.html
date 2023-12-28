@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'PickingProblems/css/edit_fpp.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit</title>
+    
+        </head>
+        <body>
+            <div class="top-bar">
+                <!-- Logo container -->
+                <div class="logo-container">
+                    <img src="{% static 'PickingProblems/images/logo.png' %}" class="logo">
+                </div>
+                <!-- Move the text to the top right -->        
+                <a href="{% url 'login' %}" class="red-button"><i class="fa fa-sign-out"></i> Sign Out</a>
+
+            </div>
+            <div class="center-text" >
+                <h1>Edit Picking Problem</h1>  
+            </div>
+            <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" id="id_work_order" name="{{ form.work_order.name }}" value="{{ form.initial.work_order }}">
+                <input type="hidden" id="id_part_number" name="{{ form.part_number.name }}" value="{{ form.initial.part_number }}">
+                <input type="hidden" id="id_app_dept" name="{{ form.app_dept.name }}" value="{{ form.instance.app_dept }}">
+                <input type="hidden" id="id_total_count" name="{{ form.total_count.name }}" value="{{ form.instance.total_count }}">
+                <input type="hidden" id="id_unit_type" name="{{ form.unit_type.name }}" value="{{ form.instance.unit_type }}">
+                <div class="form-field">
+                    <label for="{{ form.defect.id_for_label }}">Defect:</label>
+                    {{ form.defect }}  
+                </div>
+                
+                <div class="form-field">
+                    <label for="{{ form.total_count.id_for_label }}">Total Count:</label>
+                    <span>{{ form.instance.total_count }}</span>
+                </div>
+                <div class="form-field">
+                    <label for="{{ form.total_affected.id_for_label }}">Total Affected:</label>
+                    {{ form.total_affected }}
+                </div>
+                <div class="form-field">
+                    <label for="{{ form.unit_type.id_for_label }}">Unit of Measure:</label>
+                    <span>{{ form.instance.unit_type }}</span>
+                </div>
+                <div class="form-field">
+                    <label for="{{ form.comment.id_for_label }}">Comment:</label>
+                    {{ form.comment }}
+                </div>
+                <div class="form-field form-row"></div>
+                <div class="form-row">     
+                    <a href="{% url 'fpp' %}" class="menu-button"><i class="fa fa-arrow-left"></i> Back</a>
+                    <button class="menu-button"><i class="fa fa-check"></i> Submit</button>
+                </div>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+
+</body>
+</html>

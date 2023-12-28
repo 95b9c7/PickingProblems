@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Picking Problems Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'PickingProblems/css/pick_menu.css' %}">
+</head>
+<body>
+    
+    <div class="top-bar">
+        <!-- Logo container -->
+        <div class="logo-container">
+            <img src="{% static 'PickingProblems/images/logo.png' %}" class="logo">
+        </div>
+        <!-- Move the text to the top right -->        
+        <a href="{% url 'login' %}" class="red-button"><i class="fa fa-sign-out"></i> Sign Out</a>
+
+    </div>
+    <div class="center-text">
+        <h1>Picking Problems Menu</h1>
+        <h2 class="select-option">Select an option:</h2>
+        <ul class="button-list">
+            <li><a href="{% url 'npp' %}" class="menu-button">New Picking Problem</a></li>
+            <li><a href="{% url 'fpp' %}" class="menu-button">Follow-Up Picking Problem</a></li>
+            <li><a href="{% url 'print_pp' %}" class="menu-button">Print Picking Problems</a></li>
+            <li><a href="{% url 'pp_reports_menu' %}" class="menu-button">Picking Problem Reports</a></li>
+        </ul>    
+    </div> 
+    <div class="form-row">
+        <a href="{% url 'menu' %}" class="menu-button"><i class="fa fa-arrow-left"></i> Back</a>
+    </div>
+</body>
+</html>
